@@ -3,6 +3,9 @@ Algoritmo GestordeProyectosSimple
 	Definir numEmpleados Como Entero
     Dimensionar  empleados[20]
 	
+	Definir numProyectos Como Entero
+    Dimensionar  proyectos[20] 
+	
 	
 	Escribir "=========================================="
     Escribir "           GESTOR DE PROYECTOS SIMPLE "
@@ -22,7 +25,7 @@ Algoritmo GestordeProyectosSimple
 		1:
 			MenuEmpleado(empleados,numEmpleados)
 		2:
-			
+			MenuProyecto(proyectos, numProyectos)
 		3:
 			
 		4:
@@ -75,9 +78,68 @@ SubProceso MenuEmpleado(empleados Por Referencia, numEmpleados Por Referencia)
 			
 		De Otro Modo:
 			Escribir "Opcion no validad"
+			MenuEmpleado(empleados,numEmpleados)
 	Fin Segun
 FinSubProceso
 
-
+SubProceso MenuProyecto (proyectos Por Referencia , numProyectos Por Referencia)
+	Definir opcionProyecto, idProyecto Como Entero
+	Definir nombreProyecto Como Caracter
+	Definir nuevaTarea Como Caracter
+	
+	Escribir " "
+	Escribir  "Menu - Proyecto"
+	Escribir "1. Crear un nuevo Projecto"
+	Escribir "2. Listar todos los Proyectos"
+	Escribir "3. Asociar tareas a Proyectos"
+	Escribir "4. Volver"
+	Leer opcionProyecto
+	
+	Segun opcionProyecto Hacer
+		1:
+			Si numProyectos = 20 Entonces
+				Escribir "No se pueden agregar mas Proyectos"
+			SiNo
+				Escribir "Ingresa el Proyecto"
+				Leer nombreProyecto
+				numProyectos <- numProyectos + 1
+				proyectos[numProyectos] <- nombreProyecto
+				Escribir "Proyecto Agregado"
+				MenuProyecto(proyectos, numProyectos)
+			Fin Si
+		2:
+			Si numProyectos = 0 Entonces
+				Escribir "No hay proyectos registrados"
+			SiNo
+				Escribir "Proyectos Registrados"
+				Para i <- 1 Hasta numProyectos Con Paso 1 Hacer
+					Escribir i ". " proyectos[i]
+				Fin Para
+			Fin Si
+			MenuProyecto(proyectos, numProyectos)
+		3:
+			Si numProyectos = 0
+				Escribir "No hay Proyectos"
+			FinSi
+			Escribir "Proyectos Disponibles "
+			Para i <- 1 Hasta numProyectos Con Paso 1 Hacer
+				Escribir i ". " proyectos[i]
+			Fin Para
+			Escribir "Selecciona numero de proyecto"
+			Leer idProyecto
+			
+			Si idProyecto < 1 O idProyecto > numProyectos
+				Escribir "Proyecto Invalido"
+				MenuProyecto(proyectos, numProyectos)
+			FinSi
+			
+		4:
+			GestordeProyectosSimple()
+		De Otro Modo:
+			Escribir "Opcion no valida" 
+			MenuProyecto(proyectos, numProyectos)
+	Fin Segun
+	
+FinSubProceso
 
 
