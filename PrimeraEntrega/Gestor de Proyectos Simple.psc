@@ -6,7 +6,27 @@ Algoritmo GestordeProyectosSimple
 	Definir numProyectos Como Entero
     Dimensionar  proyectos[20] 
 	
+	Definir tareaProyecto Como Entero
+	Dimensionar tareaProyecto[20]
 	
+	Definir numTareas Como Entero
+	Dimensionar tareas[20]
+	numTareas <- 0
+	
+	Definir asignacionEmpleadoTarea Como Entero
+	Dimensionar asignacionEmpleadoTarea[20]
+	
+	Definir horasAcumuladas Como Real
+	Dimensionar horasAcumuladas[20]
+	
+	Para i <- 1 Hasta 20 Con Paso 1 Hacer
+		horasAcumuladas[i] <- 0
+		tareaProyecto[i] <- 0
+		asignacionEmpleadoTarea[i] <- 0
+		
+	Fin Para
+Repetir
+		
 	Escribir "=========================================="
     Escribir "           GESTOR DE PROYECTOS SIMPLE "
     Escribir "=========================================="
@@ -18,6 +38,8 @@ Algoritmo GestordeProyectosSimple
 	Escribir "3. Gestion de Tareas"
 	Escribir "4. Registros Horas"
 	Escribir "5. Reporte"
+	Escribir "6. Salir"
+	
 	Leer opcion
 	
 	
@@ -26,16 +48,18 @@ Algoritmo GestordeProyectosSimple
 			MenuEmpleado(empleados,numEmpleados)
 		2:
 			MenuProyecto(proyectos, numProyectos)
-		3:
-			
+		3:   
+			MenuTareas(tareas, numTareas, proyectos, numProyectos, empleados, numEmpleados,asignacionEmpleadoTarea, tareaProyecto)
 		4:
-			
+			MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
 		5:
 			
+		6:	
+			Escribir "Saliendo del sistema"
 		De Otro Modo:
-			Escribir "Opcion no validad"
+			Escribir "Opcion no valida"
 	Fin Segun
-	
+Hasta Que opcion = 6 
 FinAlgoritmo
 
 
@@ -74,10 +98,9 @@ SubProceso MenuEmpleado(empleados Por Referencia, numEmpleados Por Referencia)
 			Fin Si
 			MenuEmpleado(empleados,numEmpleados)
 		3:
-			GestordeProyectosSimple()
 			
 		De Otro Modo:
-			Escribir "Opcion no validad"
+			Escribir "Opcion no valida"
 			MenuEmpleado(empleados,numEmpleados)
 	Fin Segun
 FinSubProceso
@@ -134,12 +157,151 @@ SubProceso MenuProyecto (proyectos Por Referencia , numProyectos Por Referencia)
 			FinSi
 			
 		4:
-			GestordeProyectosSimple()
+			
 		De Otro Modo:
 			Escribir "Opcion no valida" 
 			MenuProyecto(proyectos, numProyectos)
 	Fin Segun
 	
 FinSubProceso
+
+// Gestion de Tareas
+SubProceso MenuTareas(tareas Por Referencia, numTareas Por Referencia, proyectos, numProyectos, empleados, numEmpleados, asignacionEmpleadoTarea Por Referencia, tareaProyecto Por Referencia)
+	Definir opcionTarea, idProyectoSeleccionado, idEmpSeleccionado Como Entero
+	Definir nombreTarea, responsable Como Caracter
+	
+	Escribir ""
+	Escribir "--- Menu - Tareas ---"
+	Escribir "1. Crear nueva tarea"
+	Escribir "2. Mostrar todas las tareas"
+	Escribir "3. Volver"
+	Leer opcionTarea
+	
+	Segun opcionTarea Hacer
+		1:
+			Si numProyectos = 0 Entonces
+				Escribir "Error: No existen proyectos para asignar tareas."
+			SiNo
+				Si numTareas = 20 Entonces
+					Escribir "No se pueden agregar mas tareas (Limite alcanzado)"
+				SiNo
+					// 1. Selección de Proyecto
+					Escribir "Selecciona el numero de proyecto para esta tarea:"
+					Para i <- 1 Hasta numProyectos Con Paso 1 Hacer
+						Escribir i ". " proyectos[i]
+					Fin Para
+					Leer idProyectoSeleccionado
+					
+					Si idProyectoSeleccionado < 1 O idProyectoSeleccionado > numProyectos Entonces
+						Escribir "Proyecto Invalido"
+					SiNo
+						// 2. Datos de la Tarea
+						Escribir "Ingresa el nombre de la nueva tarea:"
+						Leer nombreTarea
+						numTareas <- numTareas + 1
+						tareas[numTareas] <- nombreTarea
+						tareaProyecto[numTareas] <- idProyectoSeleccionado // Vínculo al proyecto
+						
+						// 3. Asignación de Empleado Responsable
+						Si numEmpleados = 0 Entonces
+							Escribir "Aviso: No hay empleados registrados. Tarea creada sin responsable."
+							asignacionEmpleadoTarea[numTareas] <- 0
+						SiNo
+							Escribir "Selecciona el numero de empleado responsable:"
+							Para j <- 1 Hasta numEmpleados Con Paso 1 Hacer
+								Escribir j ". " empleados[j]
+							Fin Para
+							Leer idEmpSeleccionado
+							
+							Si idEmpSeleccionado > 0 Y idEmpSeleccionado <= numEmpleados Entonces
+								asignacionEmpleadoTarea[numTareas] <- idEmpSeleccionado
+								Escribir "Responsable asignado: ", empleados[idEmpSeleccionado]
+							SiNo
+								Escribir "ID invalido. Tarea queda sin responsable."
+								asignacionEmpleadoTarea[numTareas] <- 0
+							Fin Si
+						Fin Si
+						
+						Escribir "Tarea Agregada Exitosamente"
+					Fin Si
+				Fin Si
+			Fin Si
+			MenuTareas(tareas, numTareas, proyectos, numProyectos, empleados, numEmpleados, asignacionEmpleadoTarea, tareaProyecto)
+			
+		2:
+			Si numTareas = 0 Entonces
+				Escribir "No hay tareas registradas"
+			SiNo
+				Escribir "--- Tareas Registradas ---"
+				Para i <- 1 Hasta numTareas Con Paso 1 Hacer
+					// Lógica para determinar el nombre del responsable
+					Si asignacionEmpleadoTarea[i] = 0 Entonces
+						responsable <- "Sin responsable"
+					SiNo
+						responsable <- empleados[asignacionEmpleadoTarea[i]]
+					Fin Si
+					
+					// Mostramos Tarea + Proyecto asociado + Responsable
+					Escribir i ". " tareas[i], " [Proyecto: ", proyectos[tareaProyecto[i]], "] - Responsable: ", responsable
+				Fin Para
+			Fin Si
+			MenuTareas(tareas, numTareas, proyectos, numProyectos, empleados, numEmpleados, asignacionEmpleadoTarea, tareaProyecto)
+			
+		3:
+			// No se llama a nada para que el SubProceso termine y regrese al Repetir del Algoritmo
+		
+			
+		De Otro Modo:
+			Escribir "Opcion no valida"
+			MenuTareas(tareas, numTareas, proyectos, numProyectos, empleados, numEmpleados, asignacionEmpleadoTarea, tareaProyecto)
+	Fin Segun
+FinSubProceso
+
+
+// Registro de Horas
+SubProceso MenuRegistroHoras(tareas, numTareas, horasAcumuladas Por Referencia)
+	Definir opcionRegistro, idTareaSeleccionada Como Entero
+	Definir horasIngresadas Como Real
+	
+	Escribir ""
+	Escribir "--- Menu - Registro de Horas ---"
+	Escribir "1. Registrar horas en una tarea"
+	Escribir "2. Volver"
+	Leer opcionRegistro
+	
+	Segun opcionRegistro Hacer
+		1:
+			Si numTareas = 0 Entonces
+				Escribir "Error: Debe crear tareas antes de registrar horas."
+			SiNo
+				Escribir "Selecciona el numero de la tarea:"
+				Para i <- 1 Hasta numTareas Con Paso 1 Hacer
+					Escribir i ". " tareas[i]
+				Fin Para
+				Leer idTareaSeleccionada
+				
+				Si idTareaSeleccionada < 1 O idTareaSeleccionada > numTareas Entonces
+					Escribir "Tarea Invalida"
+				SiNo
+					Escribir "Ingresa las horas trabajadas hoy en esta tarea:"
+					Leer horasIngresadas
+					
+					// VAlidación para evitar jornadas irreales (>24h)
+					Si horasIngresadas > 0 Y horasIngresadas <= 24 Entonces
+						horasAcumuladas[idTareaSeleccionada] <- horasAcumuladas[idTareaSeleccionada] + horasIngresadas
+						Escribir "Horas registradas con exito. Total en esta tarea: ", horasAcumuladas[idTareaSeleccionada]
+					SiNo
+						Escribir "Error: La jornada diaria no puede ser negativa ni mayor a 24 horas."
+					Fin Si
+				Fin Si
+			Fin Si
+			MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
+		2:
+		De Otro Modo:
+			Escribir "Opcion no valida"
+			MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
+	Fin Segun
+FinSubProceso
+
 
 
