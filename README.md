@@ -105,9 +105,9 @@ Cada índice representa una relación entre entidades.
 
 ##  Autor
 
-- Jehosua Abdiel Cañas Tijerino
-- Néstor Armando Chinchilla Fuentes 
-- Ronnie Odir Portillo Consuegra
+ Jehosua Abdiel Cañas Tijerino
+ Néstor Armando Chinchilla Fuentes 
+ Ronnie Odir Portillo Consuegra
 
 Ingeniería en Desarrollo de Software  
 Universidad de El Salvador  
