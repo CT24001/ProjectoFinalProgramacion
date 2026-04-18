@@ -49,7 +49,7 @@ Algoritmo GestordeProyectosSimple
 			3:
 				MenuTareas(tareas, numTareas, proyectos, numProyectos, empleados, numEmpleados, asignacionEmpleadoTarea, tareaProyecto)
 			4:
-				MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
+				MenuRegistroHoras(tareas, numTareas, horasAcumuladas, tareaProyecto, numProyectos, proyectos)
 			5:
 				Reporte(tareas, numTareas, proyectos, numProyectos, tareaProyecto, horasAcumuladas)
 			6:
@@ -267,10 +267,10 @@ FinSubProceso
 
 
 
-SubProceso MenuRegistroHoras(tareas, numTareas, horasAcumuladas Por Referencia)
+SubProceso MenuRegistroHoras(tareas, numTareas, horasAcumuladas Por Referencia, tareaProyecto, numProyectos, proyectos)
 	
-	Definir opcionRegistro, idTareaSeleccionada, i Como Entero
-	Definir horasIngresadas Como Real
+	Definir opcionRegistro, idTareaSeleccionada, i, idProyectoActual Como Entero
+	Definir horasIngresadas, totalProyecto Como Real
 	
 	Escribir ""
 	Escribir "------ MENU DE REGISTRO DE HORAS ------"
@@ -284,36 +284,53 @@ SubProceso MenuRegistroHoras(tareas, numTareas, horasAcumuladas Por Referencia)
 			Si numTareas = 0 Entonces
 				Escribir "Error: Debe crear tareas antes de registrar horas."
 			SiNo
-				// Se muestra todas las tareas registradas
+				// Se muestran todas las tareas registradas
 				Escribir "Selecciona el numero de la tarea:"
 				Para i <- 1 Hasta numTareas Hacer
 					Escribir i, ". ", tareas[i]
 				FinPara
 				Leer idTareaSeleccionada
 				
-				// Verificando que la tarea selecionada exista 
+				// Verificando que la tarea seleccionada exista
 				Si idTareaSeleccionada < 1 O idTareaSeleccionada > numTareas Entonces
 					Escribir "Tarea invalida"
 				SiNo
 					Escribir "Ingresa las horas trabajadas:"
 					Leer horasIngresadas
-					// Una comprobacion de la horas ingresadas sean  mayores a 0 y no pasen de jornada irreales como de 24 hr
-					Si horasIngresadas > 0 Y horasIngresadas <= 24 Entonces
-						// Aqui se guarda la horas acumuladas por tarea
-						horasAcumuladas[idTareaSeleccionada] <- horasAcumuladas[idTareaSeleccionada] + horasIngresadas
-						Escribir "Horas registradas con exito. Total en esta tarea: ", horasAcumuladas[idTareaSeleccionada]
+					
+					// Validando que las horas ingresadas sean mayores a 0
+					Si horasIngresadas > 0 Entonces
+						idProyectoActual <- tareaProyecto[idTareaSeleccionada]
+						totalProyecto <- 0
+						
+						// Sumar las horas actuales de todas las tareas del mismo proyecto
+						Para i <- 1 Hasta numTareas Hacer
+							Si tareaProyecto[i] = idProyectoActual Entonces
+								totalProyecto <- totalProyecto + horasAcumuladas[i]
+							FinSi
+						FinPara
+						
+						// Validar que el proyecto no exceda 24 horas
+						Si totalProyecto + horasIngresadas <= 24 Entonces
+							horasAcumuladas[idTareaSeleccionada] <- horasAcumuladas[idTareaSeleccionada] + horasIngresadas
+							Escribir "Horas registradas con exito."
+							Escribir "Total acumulado del proyecto: ", totalProyecto + horasIngresadas
+						SiNo
+							Escribir "Error: No se puede exceder 24 horas acumuladas por dia en el proyecto."
+							Escribir "Horas actuales del proyecto: ", totalProyecto
+						FinSi
 					SiNo
-						Escribir "Error: La cantidad de horas debe estar entre 1 y 24."
+						Escribir "Error: La cantidad de horas debe ser mayor que 0."
 					FinSi
 				FinSi
 			FinSi
-			MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
+			MenuRegistroHoras(tareas, numTareas, horasAcumuladas, tareaProyecto, numProyectos, proyectos)
 			
 		2:
 			
 		De Otro Modo:
 			Escribir "Opcion no valida"
-			MenuRegistroHoras(tareas, numTareas, horasAcumuladas)
+			MenuRegistroHoras(tareas, numTareas, horasAcumuladas, tareaProyecto, numProyectos, proyectos)
 	FinSegun
 	
 FinSubProceso
