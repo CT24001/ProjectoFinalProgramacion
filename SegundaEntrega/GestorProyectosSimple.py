@@ -1,4 +1,3 @@
-from ast import Try
 import json 
 import os
 
@@ -133,6 +132,12 @@ def menuProyecto():
     match opcion:
         case "1":
             nombre_proyecto = input("Ingrese el nombre del proyecto\n")
+            existe = any(proy['nombre']== nombre_proyecto for proy in proyectos)
+            
+            if existe:
+                print("Ya esta registrado ese proyecto \n")
+                menuProyecto()
+                return
 
             proyecto = {
                 "nombre": nombre_proyecto,
@@ -140,7 +145,11 @@ def menuProyecto():
             }
 
             proyectos.append(proyecto)
-            print("Proyecto creado\n")
+            if guardar_proyecto():
+                print(f'Proyecto {nombre_proyecto} agregado exitosamente')
+            else:
+                print("No se puedo guardar el proyecto")
+            menuProyecto()
 
             menuProyecto()
         case "2": 
@@ -153,6 +162,29 @@ def menuProyecto():
             menuProyecto()
         case "3":
             main()
+
+def guardar_proyecto():
+    try:
+        with open(ARCHIVO_PROYECTOS, 'w', encoding='utf-8') as f:
+            json.dump(proyectos, f, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f'Error al guardar el proyecto: {e}')
+        return False
+
+def cargar_proyecto():
+    global proyectos
+    if os.path.exists(ARCHIVO_PROYECTOS):
+        try:
+            with open(ARCHIVO_PROYECTOS, 'r', encoding='utf-8') as f:
+                proyectos = json.load(f)
+            print(f"✅ Se cargaron {len(proyectos)} proyectos")
+        except Exception as e:
+            print(f"Error al cargar los datos de los proyectos: {e}")
+            proyectos = []
+    else:
+        print("📋 No existe archivo de proyectos")
+        proyectos = []
 
 
 main()
