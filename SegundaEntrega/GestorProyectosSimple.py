@@ -297,9 +297,12 @@ def menuRegistroHoras():
                                     
                                     if guardar_proyecto():
                                         print("✅ Horas guardadas correctamente.")
-                                else: print("⚠ Empleado no válido.")
-                            else: print("⚠ Tarea no válida.")
-                    else: print("⚠ Proyecto no válido.")
+                                else: 
+                                    print("⚠ Empleado no válido.")
+                            else: 
+                                print("⚠ Tarea no válida.")
+                    else: 
+                        print("⚠ Proyecto no válido.")
                 except ValueError:
                     print("⚠ Error: Entrada de datos incorrecta.")
             menuRegistroHoras()

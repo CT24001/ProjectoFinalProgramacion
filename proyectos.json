@@ -1,0 +1,24 @@
+[
+    {
+        "nombre": "Base de Datos Empleados",
+        "tareas": [
+            {
+                "nombre": "Normalizacion",
+                "registros": [
+                    {
+                        "empleado": "Misael",
+                        "horas": 2.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "nombre": "Programa de Biblioteca",
+        "tareas": []
+    },
+    {
+        "nombre": "Algoritmos de Reemplazo",
+        "tareas": []
+    }
+]
