@@ -1,20 +1,20 @@
 [
     {
-        "nombre": "Desarrollo de Aplicación Móvil",
-        "tareas": []
-    },
-    {
-        "nombre": "Desarrollo de RPA para automatización de tareas",
+        "nombre": "Base de Datos",
         "tareas": [
             {
-                "nombre": "Analisis de factibilidad",
+                "nombre": "Normalizacion",
                 "registros": [
                     {
-                        "empleado": "Job Dominguez",
-                        "horas": 16.0
+                        "empleado": "Jehosua",
+                        "horas": 2.0
                     }
                 ]
             }
         ]
+    },
+    {
+        "nombre": "Programa de Biblioteca",
+        "tareas": []
     }
 ]
