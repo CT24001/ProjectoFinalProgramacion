@@ -11,9 +11,9 @@ proyectos = []
 
 # Archivos que almacenar la informacion de los empleados y 
 # los proyectos de la empresa
-ARCHIVO_EMPLEADOS = 'empleados.json'
-ARCHIVO_PROYECTOS = 'proyectos.json'
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ARCHIVO_EMPLEADOS = os.path.join(BASE_DIR, 'empleados.json')
+ARCHIVO_PROYECTOS = os.path.join(BASE_DIR, 'proyectos.json')
 
 def main():
     # Se cargan los datos de los empleados

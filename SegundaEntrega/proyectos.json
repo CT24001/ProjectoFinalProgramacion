@@ -1,12 +1,12 @@
 [
     {
-        "nombre": "Base de Datos Empleados",
+        "nombre": "Base de Datos",
         "tareas": [
             {
                 "nombre": "Normalizacion",
                 "registros": [
                     {
-                        "empleado": "Misael",
+                        "empleado": "Jehosua",
                         "horas": 2.0
                     }
                 ]
@@ -15,10 +15,6 @@
     },
     {
         "nombre": "Programa de Biblioteca",
-        "tareas": []
-    },
-    {
-        "nombre": "Algoritmos de Reemplazo",
         "tareas": []
     }
 ]
