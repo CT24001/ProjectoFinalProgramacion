@@ -40,6 +40,8 @@ def main():
             menuTarea()
         case "4":
             menuRegistroHoras()
+        case "5":
+            menuReporte()
     
 
 
@@ -304,6 +306,73 @@ def menuRegistroHoras():
 
         case "2":
             main()
+
+# ------------------------
+# Modulo Reportes
+#-------------------------
+def menuReporte():
+    print("\n" + "="*40)
+    print("           REPORTES")
+    print("="*40)
+    print("1. Reporte de horas por tarea")
+    print("2. Reporte de horas por proyecto")
+    print("3. Volver")
+
+    opcion = input("Seleccione una opcion\n")
+
+    match opcion:
+
+        case "1":
+            print("\n===== HORAS POR TAREA =====")
+
+            if not proyectos:
+                print("No hay proyectos registrados.")
+            else:
+                for proyecto in proyectos:
+
+                    print(f"\nProyecto: {proyecto['nombre']}")
+
+                    if not proyecto["tareas"]:
+                        print("  (Sin tareas)")
+                    else:
+                        for tarea in proyecto["tareas"]:
+
+                            total_horas = 0
+
+                            for registro in tarea["registros"]:
+                                total_horas += registro["horas"]
+
+                            print(f"  Tarea: {tarea['nombre']}")
+                            print(f"  Total Horas: {total_horas}")
+
+            menuReporte()
+
+        case "2":
+            print("\n===== HORAS POR PROYECTO =====")
+
+            if not proyectos:
+                print("No hay proyectos registrados.")
+            else:
+                for proyecto in proyectos:
+
+                    total_proyecto = 0
+
+                    for tarea in proyecto["tareas"]:
+
+                        for registro in tarea["registros"]:
+                            total_proyecto += registro["horas"]
+
+                    print(f"\nProyecto: {proyecto['nombre']}")
+                    print(f"Total de horas trabajadas: {total_proyecto}")
+
+            menuReporte()
+
+        case "3":
+            main()
+
+        case _:
+            print("Opcion invalida")
+            menuReporte()
 
 if __name__ == "__main__":
     main()
