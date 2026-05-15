@@ -8,6 +8,10 @@
                     {
                         "empleado": "Jehosua",
                         "horas": 2.0
+                    },
+                    {
+                        "empleado": "Jehosua",
+                        "horas": 25.0
                     }
                 ]
             }
