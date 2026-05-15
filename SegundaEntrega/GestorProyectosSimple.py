@@ -289,14 +289,19 @@ def menuRegistroHoras():
                                 if 0 <= e_idx < len(empleados):
                                     # 4. Registrar Horas
                                     h = float(input(f"Horas de {empleados[e_idx]['nombre']}: "))
-                                    registro = {
-                                        "empleado": empleados[e_idx]["nombre"],
-                                        "horas": h
-                                    }
-                                    proyectos[p_idx]["tareas"][t_idx]["registros"].append(registro)
-                                    
-                                    if guardar_proyecto():
-                                        print("✅ Horas guardadas correctamente.")
+
+                                    horas_actuales = sum(r["horas"] for r in proyectos[p_idx]["tareas"][t_idx]["registros"])
+                                    if horas_actuales + h > 24:
+                                        print(f"⚠ Error: No se pueden asignar más de 24 horas a una tarea. (Actuales: {horas_actuales}, Intentando agregar: {h})")
+                                    else:
+                                        registro = {
+                                            "empleado": empleados[e_idx]["nombre"],
+                                            "horas": h
+                                        }
+                                        proyectos[p_idx]["tareas"][t_idx]["registros"].append(registro)
+                                        
+                                        if guardar_proyecto():
+                                            print("✅ Horas guardadas correctamente.")
                                 else: 
                                     print("⚠ Empleado no válido.")
                             else: 
