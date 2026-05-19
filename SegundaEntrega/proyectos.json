@@ -19,6 +19,16 @@
     },
     {
         "nombre": "Programa de Biblioteca",
-        "tareas": []
+        "tareas": [
+            {
+                "nombre": "Creacion del modulo libros",
+                "registros": [
+                    {
+                        "empleado": "Nestor",
+                        "horas": 3.0
+                    }
+                ]
+            }
+        ]
     }
 ]
