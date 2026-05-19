@@ -107,7 +107,7 @@ def menuEmpleado():
             if len(empleados) == 0:
                 print("No hay empleados\n")
             else:
-                print("\n SELECCIONE EMPLEADO A ELIMINAR:")
+                print("\n Empleados")
                 for empleado in empleados:
                     print(empleado["id"],"-",empleado["nombre"])
                 print(" ")
@@ -130,12 +130,16 @@ def menuEmpleado():
             menuEmpleado()
         case "4":
             main()
+        case _:
+            print("Opción no válida")
+            menuEmpleado()
 
     
 
 
 
 def guardar_empleado():
+    # Esta funcion guarda la lista de empleados en el archivo JSON
     try:
         with open(ARCHIVO_EMPLEADOS, 'w',encoding='utf-8') as f:
                 json.dump(empleados,f,indent=4, ensure_ascii=False)
@@ -145,6 +149,7 @@ def guardar_empleado():
         return False
 
 def cargar_empleado():
+    # Esta funcion carga la lista de empleados del archivo JSON
     global empleados
     if os.path.exists(ARCHIVO_EMPLEADOS):
         try: 
@@ -166,33 +171,43 @@ def menuProyecto():
     print("\n Menu Proyectos")
     print("1. Crear nuevo proyecto")
     print("2. Listar todos los proyectos")
-    print("3. Volver")
+    print("3. Eliminar proyecto")
+    print("4. Volver")
     opcion = input("Seleccione una opcion\n")
 
     
 
     match opcion:
         case "1":
+            # Se obtiene el nombre del proyecto
             nombre_proyecto = input("Ingrese el nombre del proyecto\n")
+
+            # Verificar si ese proyecto ya existe o no
             existe = any(proy['nombre']== nombre_proyecto for proy in proyectos)
-            
             if existe:
                 print("Ya esta registrado ese proyecto \n")
                 menuProyecto()
                 return
 
+            # Se crea el diccionario para guargar la info del proyecto 
+            # ademas se crea un lista vacioa de tareas la cual va a almacenar 
+            # la tareas de cada proyecto
             proyecto = {
                 "nombre": nombre_proyecto,
                 "tareas": []
             }
 
             proyectos.append(proyecto)
+            # Guardar la informacion del proyecto en el archivo JSON
             if guardar_proyecto():
                 print(f'Proyecto {nombre_proyecto} agregado exitosamente')
             else:
                 print("No se puedo guardar el proyecto")
             menuProyecto()
+
         case "2": 
+            # Verificar que hayan proyectos guardados y si es asi se mostraria todos los 
+            #proyectos guardados
             if len(proyectos) == 0:
                 print("No hay proyectos registrados")
             else:
@@ -201,10 +216,37 @@ def menuProyecto():
                     print(i, "-", proyecto["nombre"])
             menuProyecto()
         case "3":
+            if len(proyectos) == 0:
+                print("No hay proyectos registrados")
+            else:
+                print("\n Proyectos ")
+                for i, proyecto in enumerate(proyectos, start=1):
+                    print(i, "-", proyecto["nombre"])
+                try:
+                    indice = int(input("\nIngrese el número del proyecto a eliminar (0 para cancelar): "))
+                    if indice == 0:
+                        menuProyecto()
+                        return
+                    if 1 <= indice <= len(proyectos):
+                        proyecto_eliminado = proyectos.pop(indice - 1)
+                        if guardar_proyecto():
+                            print(f"✅ Proyecto '{proyecto_eliminado['nombre']}' eliminado exitosamente")
+                        else:
+                            print("Error al guardar los cambios")
+                    else:
+                        print("Número de proyecto no válido")
+                except ValueError:
+                    print(" Por favor, ingrese un número válido")
+          
+            menuProyecto()
+        case "4":
             main()
+        case _:
+            print("Opción no válida")
+            menuProyecto()
 
 def guardar_proyecto():
-    # Esta funcion guarda la lista de empleados en el archivo JSON
+    
     try:
         with open(ARCHIVO_PROYECTOS, 'w', encoding='utf-8') as f:
             json.dump(proyectos, f, indent=4, ensure_ascii=False)
@@ -214,7 +256,7 @@ def guardar_proyecto():
         return False
 
 def cargar_proyecto():
-    # Esta funcion carga la lista de los empleados que esta en el archivo JSON
+    
     global proyectos
     if os.path.exists(ARCHIVO_PROYECTOS):
         try:
