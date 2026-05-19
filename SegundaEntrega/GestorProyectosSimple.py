@@ -285,15 +285,20 @@ def menuTarea():
 
     match opcion:
         case "1":
+            # Se verifica que existan proyectos 
             if not proyectos:
-                print("⚠ No hay proyectos registrados.")
+                print(" No hay proyectos registrados.")
             else:
                 # Selección de Proyecto
+                print("\n Proyectos")
                 for i, p in enumerate(proyectos, start=1):
                     print(f"{i}. {p['nombre']}")
                 
                 try:
+                    # Se solicita al usuario que el # de proyecto para agregar tarea 
                     p_idx = int(input("Seleccione el número del proyecto: ")) - 1
+                    # Se verfica que # de proyecto se valido entonces se pide 
+                    # el nombre de la tarea
                     if 0 <= p_idx < len(proyectos):
                         nombre_tarea = input("Nombre de la tarea: ")
                         
@@ -302,18 +307,22 @@ def menuTarea():
                             "nombre": nombre_tarea,
                             "registros": []
                         }
+                        # Se agrega la tarea al proyecto selecionado
                         proyectos[p_idx]["tareas"].append(nueva_tarea)
                         
+                        # Se guardan los datos en el archivo JSON
                         if guardar_proyecto():
                             print(f"✅ Tarea '{nombre_tarea}' agregada exitosamente.")
                     else:
-                        print("⚠ Índice no válido.")
+                        print(" Índice no válido.")
                 except ValueError:
-                    print("⚠ Error: Ingrese solo números.")
+                    print(" Error: Ingrese solo números.")
             menuTarea()
 
         case "2":
             print("\n--- Listado de Tareas ---")
+            # Se recorre todos los proyectos y se verifica si tiene tareas o no para poder 
+            # mostrarlas
             for p in proyectos:
                 print(f"Proyecto: {p['nombre']}")
                 if not p["tareas"]:
@@ -324,6 +333,10 @@ def menuTarea():
 
         case "3":
             main()
+        case _:
+            # Manejar cuando el usuario ingresa una opcion no válida
+            print(" Opción no válida")
+            menuTarea()
 
 # ------------------------
 # Modulo Registro de Horas
@@ -338,6 +351,7 @@ def menuRegistroHoras():
 
     match opcion:
         case "1":
+            # Verificar que existan empleados y proyectos para poder registrar horas
             if not empleados or not proyectos:
                 print("⚠ Se requieren empleados y proyectos con tareas.")
             else:
@@ -351,14 +365,16 @@ def menuRegistroHoras():
                     if 0 <= p_idx < len(proyectos):
                         # 2. Seleccionar Tarea
                         tareas = proyectos[p_idx]["tareas"]
+                        # Se verifica que el proyecto tenga tareas
                         if not tareas:
-                            print("⚠ Este proyecto no tiene tareas.")
+                            print(" Este proyecto no tiene tareas.")
                         else:
                             print("\n--- Seleccione Tarea ---")
                             for i, t in enumerate(tareas, start=1):
                                 print(f"{i}. {t['nombre']}")
                             t_idx = int(input("Número: ")) - 1
-
+                            
+                            # Se verfica que la tarea seleciona exista
                             if 0 <= t_idx < len(tareas):
                                 # 3. Seleccionar Empleado
                                 print("\n--- Seleccione Empleado ---")
@@ -366,34 +382,43 @@ def menuRegistroHoras():
                                     print(f"{i}. {e['nombre']}")
                                 e_idx = int(input("Número: ")) - 1
 
+                                # Validar que el empleado exista
                                 if 0 <= e_idx < len(empleados):
                                     # 4. Registrar Horas
                                     h = float(input(f"Horas de {empleados[e_idx]['nombre']}: "))
-
+                                    
+                                    # Calcular el total de hora 
                                     horas_actuales = sum(r["horas"] for r in proyectos[p_idx]["tareas"][t_idx]["registros"])
                                     if horas_actuales + h > 24:
                                         print(f"⚠ Error: No se pueden asignar más de 24 horas a una tarea. (Actuales: {horas_actuales}, Intentando agregar: {h})")
                                     else:
+                                        # Se crea el registro de horas con su empleado correspondiente
                                         registro = {
                                             "empleado": empleados[e_idx]["nombre"],
                                             "horas": h
                                         }
+                                        # Se agrega el registro a la tarea
                                         proyectos[p_idx]["tareas"][t_idx]["registros"].append(registro)
                                         
+                                        # Se guarda los datos en el archivo JSON
                                         if guardar_proyecto():
-                                            print("✅ Horas guardadas correctamente.")
+                                            print("Horas guardadas correctamente.")
                                 else: 
-                                    print("⚠ Empleado no válido.")
+                                    print(" Empleado no válido.")
                             else: 
-                                print("⚠ Tarea no válida.")
+                                print(" Tarea no válida.")
                     else: 
-                        print("⚠ Proyecto no válido.")
+                        print("Proyecto no válido.")
                 except ValueError:
-                    print("⚠ Error: Entrada de datos incorrecta.")
+                    print(" Error: Entrada de datos incorrecta.")
             menuRegistroHoras()
 
         case "2":
             main()
+
+        case _:
+            print(" Opción no válida")
+            menuRegistroHoras()
 
 # ------------------------
 # Modulo Reportes
@@ -412,24 +437,28 @@ def menuReporte():
 
         case "1":
             print("\n===== HORAS POR TAREA =====")
-
+            # Verificar si existen proyectos registrados
             if not proyectos:
                 print("No hay proyectos registrados.")
             else:
+                # Recorrre cada proyecto
                 for proyecto in proyectos:
 
                     print(f"\nProyecto: {proyecto['nombre']}")
-
+                    
+                    # Verifica que el proyecto tenga tareas
                     if not proyecto["tareas"]:
                         print("  (Sin tareas)")
                     else:
+                        # Se recorre cada tarea que tiene cada proyecto
                         for tarea in proyecto["tareas"]:
-
+                            # Calcular el total de horas de la tarea sumando todos los registros
                             total_horas = 0
 
                             for registro in tarea["registros"]:
                                 total_horas += registro["horas"]
 
+                            # Se muestra todos los datos obtenidos 
                             print(f"  Tarea: {tarea['nombre']}")
                             print(f"  Total Horas: {total_horas}")
 
@@ -437,19 +466,22 @@ def menuReporte():
 
         case "2":
             print("\n===== HORAS POR PROYECTO =====")
-
+            
+            # Verificar si existen proyectos registrados
             if not proyectos:
                 print("No hay proyectos registrados.")
             else:
                 for proyecto in proyectos:
 
+                     # Calcular el total de horas del proyecto sumando todas las tareas
                     total_proyecto = 0
-
+                    #  Sumar horas de todas las tareas del proyecto
                     for tarea in proyecto["tareas"]:
 
                         for registro in tarea["registros"]:
                             total_proyecto += registro["horas"]
 
+                     # Mostrar el resultado del proyecto
                     print(f"\nProyecto: {proyecto['nombre']}")
                     print(f"Total de horas trabajadas: {total_proyecto}")
 
@@ -462,5 +494,9 @@ def menuReporte():
             print("Opcion invalida")
             menuReporte()
 
+
+# ============================================
+# PUNTO DE ENTRADA DEL PROGRAMA
+# ============================================
 if __name__ == "__main__":
     main()
