@@ -1,22 +1,20 @@
 import json 
 import os
 
-# Variables globales
-numEmpleados = 0
-numProyectos = 0
 
-# Arreglos
+
+# Listas donde se van a almacenar los datos de los empleados y proyectos
 empleados = []
 proyectos = []
 
-# Archivos que almacenar la informacion de los empleados y 
+# Archivos que va a almacenar la informacion de los empleados y 
 # los proyectos de la empresa
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ARCHIVO_EMPLEADOS = os.path.join(BASE_DIR, 'empleados.json')
 ARCHIVO_PROYECTOS = os.path.join(BASE_DIR, 'proyectos.json')
 
 def main():
-    # Se cargan los datos de los empleados
+    # Se cargan los datos de los empleados y los proyectos
     cargar_empleado()
     cargar_proyecto()
 
@@ -29,6 +27,7 @@ def main():
     print("4. Registro de Horas")
     print("5. Reporte")
     print("6. Salir")
+    print(" ")
     opcion = input("Seleccione una opcion\n")
 
     match opcion:
@@ -42,6 +41,12 @@ def main():
             menuRegistroHoras()
         case "5":
             menuReporte()
+        case '6':
+            print("Hasta luego")
+            exit() # Comando de python para salir del programa
+        case _:
+            print("Opcion no valida. Intente de nuevo")
+            main()
     
 
 
@@ -53,7 +58,8 @@ def menuEmpleado():
     print("\n Menu Empleados")
     print("1. Crear nuevo empleado")
     print("2. Mostrar empleados")
-    print("3. Volver")
+    print("3. Eliminar empleado")
+    print("4. Volver")
     opcion = input("Seleccione una opcion\n")
 
     match opcion:
@@ -70,14 +76,16 @@ def menuEmpleado():
                 menuEmpleado()
                 return
             
-            # Se crea el diccionario a ocupar
+            # Se crea el dicionario con los datos del empleado que se recibio
             empleado = {
                 "id": id_empleado,
                 "nombre": nombre
             }
+
             # Agregando a la lista de los empleados
             empleados.append(empleado)
 
+            # Se llama a la funcion para poder guardar los datos en el archivo json
             if guardar_empleado():
                 print("'Empleado agregado exitosamente")
             else:
@@ -85,16 +93,44 @@ def menuEmpleado():
             menuEmpleado()
 
         case "2":
+            # Se verifica si hay empleados 
             if len(empleados) == 0:
                 print("No hay empleados\n")
             else:
+                # Si hay empleado se recorre la lista con los datos de los empleados
                 print("\nEmpleados Registrados")
                 for empleado in empleados:
                     print(empleado["id"],"-",empleado["nombre"])
                 print(" ")
             menuEmpleado()
         case "3":
+            if len(empleados) == 0:
+                print("No hay empleados\n")
+            else:
+                print("\n SELECCIONE EMPLEADO A ELIMINAR:")
+                for empleado in empleados:
+                    print(empleado["id"],"-",empleado["nombre"])
+                print(" ")
+                try:
+                    indice = int(input("\nIngrese el número del empleado a eliminar (0 para cancelar): "))
+                    if indice == 0:
+                        menuEmpleado()
+                        return
+                    if 1 <= indice <= len(empleados):
+                        empleado_eliminado = empleados.pop(indice - 1)
+                        if guardar_empleado():
+                            print(f"Empleado '{empleado_eliminado['nombre']}' eliminado exitosamente")
+                        else:
+                            print(" Error al guardar los cambios")
+                    else:
+                        print("Número de empleado no válido")
+                except ValueError:
+                    print("Por favor, ingrese un número válido")
+
+            menuEmpleado()
+        case "4":
             main()
+
     
 
 
@@ -168,6 +204,7 @@ def menuProyecto():
             main()
 
 def guardar_proyecto():
+    # Esta funcion guarda la lista de empleados en el archivo JSON
     try:
         with open(ARCHIVO_PROYECTOS, 'w', encoding='utf-8') as f:
             json.dump(proyectos, f, indent=4, ensure_ascii=False)
@@ -177,17 +214,18 @@ def guardar_proyecto():
         return False
 
 def cargar_proyecto():
+    # Esta funcion carga la lista de los empleados que esta en el archivo JSON
     global proyectos
     if os.path.exists(ARCHIVO_PROYECTOS):
         try:
             with open(ARCHIVO_PROYECTOS, 'r', encoding='utf-8') as f:
                 proyectos = json.load(f)
-            print(f"✅ Se cargaron {len(proyectos)} proyectos")
+            print(f"Se cargaron {len(proyectos)} proyectos")
         except Exception as e:
             print(f"Error al cargar los datos de los proyectos: {e}")
             proyectos = []
     else:
-        print("📋 No existe archivo de proyectos")
+        print(" No existe archivo de proyectos")
         proyectos = []
 
 
