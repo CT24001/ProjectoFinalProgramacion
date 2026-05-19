@@ -30,5 +30,19 @@
                 ]
             }
         ]
+    },
+    {
+        "nombre": "Gestor de Proyectos Simples",
+        "tareas": [
+            {
+                "nombre": "Modulo de Empleados",
+                "registros": [
+                    {
+                        "empleado": "Jehosua",
+                        "horas": 2.0
+                    }
+                ]
+            }
+        ]
     }
 ]
