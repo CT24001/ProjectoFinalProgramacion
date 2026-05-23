@@ -14,6 +14,10 @@
                         "horas": 25.0
                     }
                 ]
+            },
+            {
+                "nombre": "Diagrama entidad-relacion ",
+                "registros": []
             }
         ]
     },
