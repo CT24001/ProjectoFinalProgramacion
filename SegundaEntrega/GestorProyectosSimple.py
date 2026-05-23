@@ -1,3 +1,9 @@
+# Gestor de Proyectos Simple
+# Un proyecto tiene varias tareas asignadas a empleados. Los
+# empleados pueden registrar las horas que trabajan en cada tarea.Se debe permitir
+# calcular el total de horas por tarea o por proyecto.Evitar que un empleado registre
+# jornadas irreales (por ejemplo, más de 24 horas en un día).
+
 import json 
 import os
 
