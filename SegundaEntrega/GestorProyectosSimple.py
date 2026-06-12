@@ -104,19 +104,23 @@ def menuEmpleado():
                 print("No hay empleados\n")
             else:
                 # Si hay empleado se recorre la lista con los datos de los empleados
-                print("\nEmpleados Registrados")
-                for empleado in empleados:
-                    print(empleado["id"],"-",empleado["nombre"])
-                print(" ")
+                print("\n================ EMPLEADOS REGISTRADOS ================\n")
+                print(f"{'N° Empleado':<15} {'ID':<10} {'Nombre':<20}")
+                print("-" * 50)
+
+                for i, empleado in enumerate(empleados, start=1):
+                    print(f"{i:<15} {empleado['id']:<10} {empleado['nombre']:<20}")
             menuEmpleado()
         case "3":
             if len(empleados) == 0:
                 print("No hay empleados\n")
             else:
-                print("\n Empleados")
-                for empleado in empleados:
-                    print(empleado["id"],"-",empleado["nombre"])
-                print(" ")
+                print("\n================ EMPLEADOS REGISTRADOS ================\n")
+                print(f"{'N° Empleado':<15} {'ID':<10} {'Nombre':<20}")
+                print("-" * 50)
+                
+                for i, empleado in enumerate(empleados, start=1):
+                    print(f"{i:<15} {empleado['id']:<10} {empleado['nombre']:<20}")
                 try:
                     indice = int(input("\nIngrese el número del empleado a eliminar (0 para cancelar): "))
                     if indice == 0:
