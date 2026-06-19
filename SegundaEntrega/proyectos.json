@@ -1,27 +1,5 @@
 [
     {
-        "nombre": "Base de Datos",
-        "tareas": [
-            {
-                "nombre": "Normalizacion",
-                "registros": [
-                    {
-                        "empleado": "Jehosua",
-                        "horas": 2.0
-                    },
-                    {
-                        "empleado": "Jehosua",
-                        "horas": 25.0
-                    }
-                ]
-            },
-            {
-                "nombre": "Diagrama entidad-relacion ",
-                "registros": []
-            }
-        ]
-    },
-    {
         "nombre": "Programa de Biblioteca",
         "tareas": [
             {
@@ -44,6 +22,20 @@
                     {
                         "empleado": "Jehosua",
                         "horas": 2.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "nombre": "programacion de base de datos",
+        "tareas": [
+            {
+                "nombre": "crear las tablas",
+                "registros": [
+                    {
+                        "empleado": "Nestor",
+                        "horas": 6.0
                     }
                 ]
             }
